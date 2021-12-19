@@ -1,7 +1,13 @@
 import random
 import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from imblearn.under_sampling import RandomUnderSampler
+
 
 dataset = pd.read_csv("data/magic04.data").to_numpy()
+
+
 
 h = []
 g = []
@@ -28,6 +34,10 @@ for c in range(len(dataset)):
         g.append(dataset[c])
 
 
+
+
+
+
 def data_balancing(a, b):
     if len(a) > len(b):
         return b, random.choices(a, k=len(b))
@@ -51,3 +61,4 @@ def data_splitting(data):
 
 h_train, h_test = data_splitting(hard_on_list)
 g_train, g_test = data_splitting(gamma_list)
+
