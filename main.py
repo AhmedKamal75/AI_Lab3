@@ -37,4 +37,17 @@ def data_balancing(a, b):
 
 hard_on_list, gamma_list = data_balancing(h, g);
 
-def data_splitting():
+
+def data_splitting(data):
+    training = []
+    test = []
+    thirty_percent = int((len(data) / 100) * 30)
+    for i in range(thirty_percent):
+        test.append(data.pop(random.randrange(len(data))))
+    while len(data) != 0:
+        training.append(data.pop(random.randrange(len(data))))
+    return training, test;
+
+
+h_train, h_test = data_splitting(hard_on_list)
+g_train, g_test = data_splitting(gamma_list)
