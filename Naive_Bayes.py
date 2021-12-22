@@ -25,7 +25,7 @@ class NaiveBayesGaussian:
         i = 0
         j = 0
         for col, cls in enumerate(y):
-            if cls == 1:
+            if cls == 1.0:
                 X_1[i, :] = X[col, :]
                 i += 1
             else:
@@ -46,7 +46,6 @@ class NaiveBayesGaussian:
 
     def predict_instance(self, x):
         score_0 = math.log(self.zero_num / (self.zero_num + self.ones_num))
-
         for (point, mean, std) in zip(x, self.zero_mean, self.zero_std):
             score_0 += norm.logpdf(point, loc=mean, scale=std)
 
@@ -63,16 +62,8 @@ class NaiveBayesGaussian:
 def naive_bayes_gaussian(X, y, X_test, y_test):
     model = NaiveBayesGaussian()
     model.fit(X, y)
-
     predictions = model.predict(X_test)
-    # good = 0
-    # bad = 0
-    # for (true, pre) in zip(y_test, predictions):
-    #     if true[0] == pre[0]:
-    #         good += 1
-    #     else:
-    #         bad += 1
-    # print(f"good: {good}, bad: {bad}")
+
     return get_result(y_test, predictions)
 
 
