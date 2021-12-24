@@ -1,11 +1,12 @@
+import time
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from imblearn.under_sampling import RandomUnderSampler
-from Naive_Bayes import naive_bayes_gaussian, naive_bayes_sklearn
+from Naive_Bayes import naive_bayes_gaussian
 from adaboost import adaboost_classifier
-from k_nearest_keighbor import knn
+from k_nearest_keighbor import knn_
 
 
 def ready_data(dataset, label_encode=True, resample=True, split=True):
@@ -28,31 +29,29 @@ def ready_data(dataset, label_encode=True, resample=True, split=True):
 
 
 def main(dataset, method="NB"):
-    global result, result_2
+    global result
     if method == "NB":
-        # no need to resample any thing
         X_train, X_test, y_train, y_test = ready_data(dataset, resample=False)
-        # X_train, X_test, y_train, y_test = train_test_split(inputs, targets, test_size=0.3, random_state=0)
         result = naive_bayes_gaussian(X_train, y_train, X_test, y_test)
-        result_2 = naive_bayes_sklearn(X_train, y_train, X_test, y_test)
     elif method == "DT":
         pass
     elif method == "RF":
         pass
     elif method == "AB":
         X_train, X_test, y_train, y_test = ready_data(dataset)
-        adaboost_classifier(X_train, y_train, X_test, y_test)
-        # result = adaboost_classifier(X_train, y_train, X_test, y_test)
-    elif method == "KNN":
+        result = adaboost_classifier(X_train, y_train, X_test, y_test)
+    elif method == "KNN":  # very slow O(n*m) per sample, and we have 4000 sample. n = 9000, m = 10
         X_train, X_test, y_train, y_test = ready_data(dataset)
-        result = knn(X_train, y_train, X_test, y_test)
+        result = knn_(X_train, y_train, X_test, y_test)
+    else:
+        return False
 
     for title in result:
         print(f"{title} --> {result.get(title)}")
-    # print("sklearn module")
-    # for title in result_2:
-    #     print(f"{title} --> {result.get(title)}")
 
 
 if __name__ == "__main__":
+    start = time.time()
     main(pd.read_csv("data/magic04.data"), "KNN")
+    end = time.time()
+    print(f"time taken: {end - start}")

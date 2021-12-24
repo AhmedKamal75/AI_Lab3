@@ -76,6 +76,8 @@ def naive_bayes_sklearn(X, y, X_test, y_test):
 
 
 def get_result(true, predictions):
+    print(true)
+    print(predictions)
     (tn, fp), (fn, tp) = confusion_matrix(true, predictions)
     result = {
         "f": f1_score(true, predictions, pos_label=1.0),
