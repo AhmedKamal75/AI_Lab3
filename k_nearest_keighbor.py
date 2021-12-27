@@ -1,5 +1,6 @@
 import statistics
 import numpy as np
+from sklearn.neighbors import KNeighborsClassifier
 import math
 import dill
 from Naive_Bayes import get_result
@@ -97,3 +98,10 @@ def knn_(X_train, y_train, X_test, y_test):
     model.fit(X, y)
     predictions = model.predict(Xt)
     return get_result(yt, predictions)
+
+
+def knn_sklearn(X_train, y_train, X_test, y_test):
+    model = KNeighborsClassifier(n_neighbors=11,)
+    model.fit(X_train, y_train)
+    predictions = model.predict(X_test)
+    return get_result(y_test, predictions)

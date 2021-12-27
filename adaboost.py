@@ -1,7 +1,9 @@
 import math
 import numpy as np
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.tree import DecisionTreeClassifier
 import dill
-import Naive_Bayes
+from Naive_Bayes import get_result
 
 FILE_NAME = "data/adaboost_stumps.pickle"
 
@@ -53,14 +55,6 @@ def count(x, y):
 
 class Stump:
     def __init__(self, X, y, weights, root_feature=0):
-        # self._true_correct = 0
-        # self._true_wrong = 0
-        # self._false_correct = 0
-        # self._false_wrong = 0
-        # self.x =
-        # self.y =
-        # self.total_gini = weighted_impurity(self.counts)
-        # build the stump
         print(f"\tstart creating trial stump {root_feature}#")
         self._root_feature = root_feature
         (self._total_gini, self._separation_point), (self._counts, self._classes) = count(X[:, root_feature], y)
@@ -201,9 +195,9 @@ class Adaboost:
         # return stats.mode(np.array([stump.predict(instance) for stump in self.stumps]))[0][0]
 
 
-def adaboost_classifier(X, y, X_test, y_test, read=True):
+def adaboost_classifier(X, y, X_test, y_test, write=False, read=True):
     module = Adaboost()
-    module.fit(X, y, read_of_file=read)
+    module.fit(X, y, write_to_file=write, read_of_file=read)
     predictions = module.predict(X_test)
     # right = 0
     # wrong = 0
@@ -213,4 +207,11 @@ def adaboost_classifier(X, y, X_test, y_test, read=True):
     #     else:
     #         wrong += 1
     # print(f"right: {right}, wrong: {wrong}")
-    return Naive_Bayes.get_result(y_test, predictions)
+    return get_result(y_test, predictions)
+
+
+def adaboost_sklearn(X, y, X_test, y_test):
+    model = AdaBoostClassifier(base_estimator=DecisionTreeClassifier(max_depth=1), random_state=15)
+    model.fit(X, y)
+    predictions = model.predict(X_test)
+    return get_result(y_test, predictions=predictions)

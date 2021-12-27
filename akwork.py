@@ -6,7 +6,7 @@ from sklearn.preprocessing import LabelEncoder
 from imblearn.under_sampling import RandomUnderSampler
 from Naive_Bayes import naive_bayes_gaussian
 from adaboost import adaboost_classifier
-from k_nearest_keighbor import knn_
+from k_nearest_keighbor import knn_, knn_sklearn
 
 
 def ready_data(dataset, label_encode=True, resample=True, split=True):
@@ -42,7 +42,8 @@ def main(dataset, method="NB"):
         result = adaboost_classifier(X_train, y_train, X_test, y_test)
     elif method == "KNN":  # very slow O(n*m) per sample, and we have 4000 sample. n = 9000, m = 10
         X_train, X_test, y_train, y_test = ready_data(dataset)
-        result = knn_(X_train, y_train, X_test, y_test)
+        # result = knn_(X_train, y_train, X_test, y_test)
+        result = knn_sklearn(X_train, y_train, X_test, y_test)
     else:
         return False
 
