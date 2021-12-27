@@ -41,9 +41,10 @@ y = balanced_dataset['Class']
 
 def spliting_scaling():
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30)
-    sc = StandardScaler()
-    X_train = sc.fit_transform(X_train)
-    X_test = sc.transform(X_test)
+    scaler = StandardScaler()
+    scaler.fit(X_train)
+    X_train = scaler.transform(X_train)
+    X_test = scaler.transform(X_test)
     return X_train, X_test, y_train, y_test
 
 
