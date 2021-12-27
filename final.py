@@ -39,42 +39,53 @@ X = balanced_dataset.drop('Class', axis=1)
 y = balanced_dataset['Class']
 
 
-def decision_tree():
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30)
-    classifier = DecisionTreeClassifier()
-    classifier.fit(X_train, y_train)
-    y_pred = classifier.predict(X_test)
-    print(confusion_matrix(y_test, y_pred))
-    print(classification_report(y_test, y_pred))
-    print(accuracy_score(y_test, y_pred))
-
-
-def ada_boost():
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30)
-    classifier = AdaBoostClassifier()
-    classifier.fit(X_train, y_train)
-    y_pred = classifier.predict(X_test)
-    print(confusion_matrix(y_test, y_pred))
-    print(classification_report(y_test, y_pred))
-    print(accuracy_score(y_test, y_pred))
-
-
-def k_nn():
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30)
-    classifier = KNeighborsClassifier()
-    classifier.fit(X_train, y_train)
-    y_pred = classifier.predict(X_test)
-    print(confusion_matrix(y_test, y_pred))
-    print(classification_report(y_test, y_pred))
-    print(accuracy_score(y_test, y_pred))
-
-
-def random_forests():
+def spliting_scaling():
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30)
     sc = StandardScaler()
     X_train = sc.fit_transform(X_train)
     X_test = sc.transform(X_test)
-    classifier = RandomForestClassifier()
+    return X_train, X_test, y_train, y_test
+
+
+# criterion :{“gini”, “entropy”},   default=”gini”
+# splitter  :{“best”, “random”},    default=”best”
+def decision_tree(criterion, splitter):
+    X_train, X_test, y_train, y_test = spliting_scaling()
+    classifier = DecisionTreeClassifier(criterion=criterion, splitter=splitter)
+    classifier.fit(X_train, y_train)
+    y_pred = classifier.predict(X_test)
+    print(confusion_matrix(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+    print(accuracy_score(y_test, y_pred))
+
+
+# n_estimators  :int,   default=50
+def ada_boost(n_estimators):
+    X_train, X_test, y_train, y_test = spliting_scaling()
+    classifier = AdaBoostClassifier(n_estimators=n_estimators)
+    classifier.fit(X_train, y_train)
+    y_pred = classifier.predict(X_test)
+    print(confusion_matrix(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+    print(accuracy_score(y_test, y_pred))
+
+
+# n_neighbors :int,     default=5
+def k_nn(n_neighbors):
+    X_train, X_test, y_train, y_test = spliting_scaling()
+    classifier = KNeighborsClassifier(n_neighbors=n_neighbors)
+    classifier.fit(X_train, y_train)
+    y_pred = classifier.predict(X_test)
+    print(confusion_matrix(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+    print(accuracy_score(y_test, y_pred))
+
+
+# criterion :{“gini”, “entropy”},   default=”gini”
+# n_estimators  :int,   default=100
+def random_forests(criterion, n_estimators):
+    X_train, X_test, y_train, y_test = spliting_scaling()
+    classifier = RandomForestClassifier(criterion=criterion, n_estimators=n_estimators)
     classifier.fit(X_train, y_train)
     y_pred = classifier.predict(X_test)
     print(confusion_matrix(y_test, y_pred))
@@ -83,7 +94,7 @@ def random_forests():
 
 
 def naive_bayes():
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30)
+    X_train, X_test, y_train, y_test = spliting_scaling()
     classifier = GaussianNB()
     classifier.fit(X_train, y_train)
     y_pred = classifier.predict(X_test)
@@ -93,16 +104,16 @@ def naive_bayes():
 
 
 print("1)decision_tree()")
-decision_tree()
+decision_tree("gini", "best")
 print("------------------")
 print("2)ada_boost()")
-ada_boost()
+ada_boost(50)
 print("------------------")
 print("3)k_nn()")
-k_nn()
+k_nn(5)
 print("------------------")
 print("4)random_forests()")
-random_forests()
+random_forests("gini", 100)
 print("------------------")
 print("5)naive_bayes()")
 naive_bayes()
